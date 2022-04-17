@@ -25,11 +25,24 @@ public class JpaMain {
             movie.setPrice(10000);
             em.persist(movie);
 
+            Album album = new Album();
+            album.setArtist("빅뱅");
+            album.setName("봄 여름 가을 겨울");
+            album.setPrice(9000);
+            em.persist(album);
+
+            Movie movie1 = new Movie();
+            movie1.setDirector("C");
+            movie1.setActor("D");
+            movie1.setName("드래곤볼.");
+            movie1.setPrice(10000);
+            em.persist(movie1);
+
             em.flush();
             em.clear();
 
-            Movie findMovie = em.find(Movie.class, movie.getId());
-            System.out.println("findMovie = " + findMovie);
+            Item item = em.find(Item.class, movie1.getId());
+            System.out.println("item = " + item);
 
 
             tx.commit();
