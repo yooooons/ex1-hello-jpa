@@ -1,9 +1,8 @@
 package hellojpa;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
+import org.hibernate.Hibernate;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,23 +17,38 @@ public class JpaMain {
 
 
         try {
-            Member member = new Member();
-            member.setUsername("hello");
-            em.persist(member);
-            
+            Team team = new Team();
+            team.setName("teamA");
+            em.persist(team);
+
+            Team team2 = new Team();
+            team2.setName("teamB");
+            em.persist(team2);
+
+
+            Member member1 = new Member();
+            member1.setUsername("hello");
+            member1.setTeam(team);
+            em.persist(member1);
+
+            Member member2 = new Member();
+            member2.setUsername("hello2");
+            member2.setTeam(team2);
+            em.persist(member2);
+
+
             em.flush();
             em.clear();
-            //
-            Member refMember = em.getReference(Member.class, member.getId());
-            System.out.println("refMember.getClass() = " + refMember.getClass());//proxy
 
-            em.close();
-            refMember.getUsername();
+//            Member m = em.find(Member.class, member1.getId());
+            List<Member> members = em.createQuery("select m from Member m join  fetch m.team", Member.class)
+                    .getResultList();
+            //SQL: select * from Member
+            //SQL: select * from where TEAM_ID= xxx
 
             tx.commit();
-            
 
-        } catch (Exception e) {
+            } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
         }finally {
