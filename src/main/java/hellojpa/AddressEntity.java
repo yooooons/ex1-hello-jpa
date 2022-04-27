@@ -1,6 +1,7 @@
 package hellojpa;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "ADDRESS")
@@ -8,7 +9,6 @@ public class AddressEntity {
     @Id
     @GeneratedValue
     private Long id;
-
     @Embedded
     private Address address;
 
@@ -35,5 +35,18 @@ public class AddressEntity {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AddressEntity that = (AddressEntity) o;
+        return Objects.equals(address, that.address);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address);
     }
 }
